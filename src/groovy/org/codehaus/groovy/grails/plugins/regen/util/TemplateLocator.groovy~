@@ -1,0 +1,135 @@
+package org.codehaus.groovy.grails.plugins.regen.util
+
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.FileSystemResource
+
+import org.codehaus.groovy.grails.plugins.regen.GenerationTask
+
+import grails.util.BuildSettingsHolder
+import org.apache.log4j.Logger
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Richard Lemieux
+ * Date: Aug 21, 2010
+ * Time: 4:56:24 PM
+ */
+class TemplateLocator {
+  static Logger LOG = Logger.getLogger(TemplateLocator.class)
+
+  static private TemplateLocator instance = new TemplateLocator();
+  static public TemplateLocator instance() { instance }
+
+  private TemplateLocator() {}
+
+  def getTemplateFile(GenerationTask genTask) {
+    // assess extension
+    def templateFileName
+    if (genTask.targetTypeName == 'view') {
+      templateFileName = genTask.targetName + '.gsp'
+    } else {
+      templateFileName = genTask.targetTypeName[0].toUpperCase() + genTask.targetTypeName[1..-1] + '.groovy'
+    }
+    findFile(templateFileName, genTask.domainClass, genTask.targetTypeName)
+  }
+
+   def getPropertyOrderComparator(GenerationTask genTask) {
+    // assess extension
+    def templateFileName
+    findFile("PropertyOrderComparator.groovyy",  genTask.domainClass, genTask.targetTypeName)
+  }
+    
+  def FileSystemResource findFile(String fileName, GrailsDomainClass domainClass, String targetTypeName) {
+    FileSystemResource templateFile
+    try {
+      def baseDir = System.properties['base.dir']
+
+      // assess template tag
+      def templateTag
+
+      def templateTags = domainClass.getPropertyOrStaticPropertyOrFieldValue("regenTemplates", Map.class)
+      if (templateTags) {
+        templateTag = templatetags[targetTypeName]
+      }
+      if (!templateTag) {
+        templateTag = domainClass.getPropertyOrStaticPropertyOrFieldValue("regenTemplates", String.class) ?: ''
+      }
+      LOG.debug "Looking for templateName: ${templateTag}"
+
+      // assess package name
+      List packagePaths = domainClass.getPackageName()?.tokenize('.')
+      println "packagePaths ${packagePaths}"
+      // search by template tag
+      if (templateTag) {
+        if (templateTag.contains('.')) {
+          def templatePaths = templateTag.tokenize('.')//[0..-1]
+          templateFile = searchPath ("${baseDir}/src/templates/scaffolding", templatePaths, fileName)
+        } else {
+          templateFile = new FileSystemResource("${baseDir}/src/templates/scaffolding/${templateTag}/${fileName}")
+          LOG.debug "Trying templateFile $templateFile"
+        }
+      }
+  
+      // search by path
+      if (!templateFile?.exists()) {
+        templateFile = searchPath ("${baseDir}/src/templates/scaffolding", packagePaths, fileName)
+        LOG.debug "Trying templateFile $templateFile"
+      }
+
+      if (!templateFile?.exists()) {
+        def grailsHome = BuildSettingsHolder.settings?.grailsHome
+        if (grailsHome) {
+          templateFile = new FileSystemResource("${grailsHome}/src/grails/templates/scaffolding/${fileName}")
+        }
+        else {
+          templateFile = new ClassPathResource("src/grails/templates/scaffolding/${fileName}")
+        }
+      }
+      if (!templateFile?.exists()) {
+        templateFile = null    
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace()
+    }
+    LOG.debug "TemplateLocator found ${templateFile?.getPath()}"
+    templateFile
+  }
+
+  public FileSystemResource searchPath (String baseDir, List packagePaths, String fileName) {
+
+    for (i in packagePaths.size()-1..0 ) {
+      def relativePath = packagePaths[0..i].inject(''){path, dir -> "${path}/${dir}"}
+      def filePath = "${baseDir}${relativePath}/${fileName}"
+      def tryFile = new FileSystemResource(filePath)
+      if (tryFile.exists()) {
+        LOG.debug "Found in searchPath $tryFile"
+        return tryFile
+      }
+    }
+    def filePath = "${baseDir}/${fileName}"
+    def tryFile = new FileSystemResource(filePath)
+    if (tryFile.exists()) {
+      LOG.debug "Found in searchPath $tryFile"   
+      return tryFile    
+    }
+    return null
+  }
+
+
+  public Set<String> collectFileNamesOnPath (String baseDir, String pathToSearch) {
+    Set<String> fileNames = new TreeSet<String>()
+    def pathDirs = pathToSearch.tokenize('.')
+    println "pathDirs $pathDirs"
+    for (i in pathDirs.size()-1..0 ) {
+      def relativePath = pathDirs[0..i].inject(''){path, dir -> "${path}/${dir}"}
+      def filePath = "${baseDir}${relativePath}"
+      println "filePath ${filePath}"
+      def dir = new File(filePath)
+      if (dir.exists()) {
+        (dir.list() as List).each{name-> if(name.endsWith('.gsp')) fileNames.add name[0..-5]}
+      }
+    }
+    fileNames
+  }
+}

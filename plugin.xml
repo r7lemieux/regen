@@ -1,0 +1,43 @@
+<plugin name='regen' version='0.2.11' grailsVersion='1.2.1 &gt; *'>
+  <author>Richard Lemieux</author>
+  <authorEmail>richard.lemieux@gmail.com</authorEmail>
+  <title>Plugin summary/headline</title>
+  <description>\
+    Brief description of the plugin.
+    </description>
+  <documentation>http://grails.org/plugin/regen</documentation>
+  <resources>
+    <resource>BootStrap</resource>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+    <resource>spring.resources</resource>
+    <resource>spring.resourcesSpringBeans</resource>
+    <resource>regen.controllers.HookMergeControllerGenerator</resource>
+    <resource>regen.controllers.ReadControllerGenerator</resource>
+    <resource>regen.controllers.SaveControllerGenerator</resource>
+    <resource>regen.controllers.TemplateControllerGenerator</resource>
+    <resource>regen.domain.ExtendDomainGenerator</resource>
+    <resource>regen.domain.HookMergeDomainGenerator</resource>
+    <resource>regen.domain.NamingDomainGenerator</resource>
+    <resource>regen.domain.ReadDomainGenerator</resource>
+    <resource>regen.domain.SaveDomainGenerator</resource>
+    <resource>regen.domain.SimpleXmlDomainGenerator</resource>
+    <resource>regen.domain.StubDomainGenerator</resource>
+    <resource>regen.views.AnchorMergeViewGenerator</resource>
+    <resource>regen.views.DomainPropertiesFirstViewGenerator</resource>
+    <resource>regen.views.GrailsOriginalViewGenerator1</resource>
+    <resource>regen.views.HookMergeViewGenerator</resource>
+    <resource>regen.views.ReadViewGenerator</resource>
+    <resource>regen.views.RegenPropsViewGenerator</resource>
+    <resource>regen.views.SaveViewGenerator</resource>
+    <resource>HookMergeTagLib</resource>
+  </resources>
+  <dependencies>
+    <resolvers>
+      <resolver type='grailsPlugins' name='grailsPlugins' />
+    </resolvers>
+  </dependencies>
+  <behavior />
+</plugin>

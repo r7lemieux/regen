@@ -1,0 +1,24 @@
+.packedEdit {
+  background: transparent url(../../images/regen/packed/edit.png) 5px 50% no-repeat;
+  padding: 0px 0px 0px 28px;
+  margin: 0px;
+  color: #F1A244;
+}
+
+.buttons input.delete {
+    background: transparent url(../../images/skin/database_delete.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+.buttons input.edit {
+    background: transparent url(../../images/skin/database_edit.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+.buttons input.save {
+    background: transparent url(../../images/skin/database_save.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+div span.menuButton a.home {
+    background: url(../../images/regen/packed/edit.png) center left no-repeat;
+    color: #333;
+    padding-left: 25px;
+}
