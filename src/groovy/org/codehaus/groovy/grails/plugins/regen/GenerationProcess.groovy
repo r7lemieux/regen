@@ -18,7 +18,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 public class GenerationProcess {
   // A process is an ordered set of tasks
   static Logger LOG = Logger.getLogger(GenerationProcess.class)
-  List<GenerationTask> tasks = new ArrayList<GenerationTask>()
+  Set<GenerationTask> tasks = new TreeSet<GenerationTask>(new TaskExecutionComparator<GenerationTask>());
   String instanceSuffix = 'Instance'
 
   def properties = [:]

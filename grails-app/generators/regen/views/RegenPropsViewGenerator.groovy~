@@ -93,7 +93,7 @@ class RegenPropsViewGenerator {
     if (!renderEditorTemplate) {
        // create template once for performance
        FileSystemResource templateFile = templateLocator.findFile('renderEditor.template', domainClass, 'view');
-       println "properties template file ${templateFile}"
+       //println "properties template file ${templateFile}"
        def templateText = templateFile?.inputStream.getText()
        renderEditorTemplate = engine.createTemplate(templateText)
        genTask.process.properties.renderEditorTemplate = renderEditorTemplate

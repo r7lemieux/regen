@@ -68,7 +68,7 @@ class GrailsTemplateRegenerator {
         }
       }
 
-      println "tasks ${genProcess.tasks}"
+      LOG.debug "tasks ${genProcess.tasks}"
     }
   }
 

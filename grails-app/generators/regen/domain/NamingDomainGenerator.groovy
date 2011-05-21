@@ -48,7 +48,7 @@ def alter = { args ->
    if (nameProp) {
      sb << nameProp.name
    } else {
-     def nameProps = domainClass.properties.find{p -> p.name.endsWith('name')}
+     def nameProps = domainClass.properties.find{p -> p.name ==~ /.*[Nn]ame/}
      if (nameProps) {
        nameProps.eachWithIndex { p, i ->
          if (i) sb << ' + '
@@ -64,12 +64,11 @@ def alter = { args ->
 
   //>> """ + CustomRegionName
 
-//  if (inText.contains('//<< ' + CustomRegionName)) {
-//    HookMerge hookMerge = new HookMerge();
-//    hookMerge.mergeTemplateWithCustom(sb, inText, "groovy");
-//  } else {
-  inText.substring(0, closingBracketPosition ) + sb + "\n}"
-//  }
-
+  if (inText.contains('//<< ' + CustomRegionName)) {
+    HookMerge hookMerge = new HookMerge();
+    hookMerge.mergeTemplateWithCustom(inText, sb.toString(), "groovy");
+  } else {
+    inText.substring(0, closingBracketPosition ) + sb + "\n}"
+  }
 }
 }

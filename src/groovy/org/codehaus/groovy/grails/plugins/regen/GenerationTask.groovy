@@ -110,14 +110,17 @@ class GenerationTask {
     if (!debugDir.exists() || !debugDir.isDirectory()) {
       debugDir.mkdirs()
     }
-    String extensionName = "txt"
-    if (resultFile) {
-      String[] resultFilenameParts = resultFile.getFilename().split()
-      extensionName = resultFilenameParts[resultFilenameParts.length -1]
+    def extensionName = 'groovy'
+    if (this.targetTypeName == 'view') {
+      extensionName = 'gsp'
     }
-    String filename = buildFileName([process.name, name, targetTypeName[0].toUpperCase() + targetTypeName[1..-1],
+    String filename = buildFileName([process.name, name, targetTypeName,
       targetName, domainClass.name, genStepDefName, extensionName])
-    new File(debugDirName + filename).setText(alteredText)
+    try {
+      new File(debugDirName + filename).setText(alteredText)
+    } catch (Exception e) {
+      //e.printStackTrace();
+    }
   }
 
   String buildFileName (List<String>nameParts) {
@@ -237,3 +240,4 @@ class GenerationTask {
 
 
 }
+

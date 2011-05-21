@@ -50,8 +50,8 @@ class GenerationTask {
       LOG.debug "init generation task"
       def application = ApplicationHolder.getApplication()
       def allGenerators = application.getGeneratorClasses()
-      print   "generators ${allGenerators}"
-      println " targetTypeName ${targetTypeName}"
+      LOG.info "generators ${allGenerators.collect{it.name}}"
+      LOG.info " targetTypeName ${targetTypeName}"
       def capitalizedTargetTypeName = targetTypeName[0].toUpperCase() + targetTypeName[1..-1]
       //println "capitalizedTargetTypeName $capitalizedTargetTypeName"
       //allGenerators.each{println it.name}
