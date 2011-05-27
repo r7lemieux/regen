@@ -18,13 +18,10 @@
     <resource>regen.controllers.ReadControllerGenerator</resource>
     <resource>regen.controllers.SaveControllerGenerator</resource>
     <resource>regen.controllers.TemplateControllerGenerator</resource>
-    <resource>regen.domain.ExtendDomainGenerator</resource>
     <resource>regen.domain.HookMergeDomainGenerator</resource>
     <resource>regen.domain.NamingDomainGenerator</resource>
     <resource>regen.domain.ReadDomainGenerator</resource>
     <resource>regen.domain.SaveDomainGenerator</resource>
-    <resource>regen.domain.SimpleXmlDomainGenerator</resource>
-    <resource>regen.domain.StubDomainGenerator</resource>
     <resource>regen.views.AnchorMergeViewGenerator</resource>
     <resource>regen.views.DomainPropertiesFirstViewGenerator</resource>
     <resource>regen.views.GrailsOriginalViewGenerator1</resource>

@@ -26,12 +26,16 @@ class GrailsTemplateRegenerator {
 
     List<String> givenViewNames = new ArrayList<String>()
 
+    def availableTypeNames = []
+    ApplicationHolder.getApplication().getArtefacts('Generator').each { g ->
+      def m = g.name =~ '.*([A-Z][a-z0-9-_]*)$'
+      if (m.matches()) availableTypeNames.add(m[0][1].toLowerCase())
+    }
+
     if (givenTargetTypeNames.contains('all') || givenTargetTypeNames.contains('*')) {
       givenTargetTypeNames.remove('*')
       givenTargetTypeNames.remove('all')
-      givenTargetTypeNames.add('controller')
-      givenTargetTypeNames.add('views')
-      givenTargetTypeNames.add('domain')
+      givenTargetTypeNames.addAll(availableTypeNames)
     }
     givenTargetTypeNames.each { String targetTypeName ->
       if (targetTypeName ==~ /view(s)?/ ) {

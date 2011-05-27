@@ -1,12 +1,5 @@
-//import org.codehaus.groovy.grails.commons.DefaultGrailsApplication
-//import org.codehaus.groovy.grails.commons.spring.GrailsRuntimeConfigurator
-//import org.springframework.context.ApplicationContext
-//import org.codehaus.groovy.grails.plugins.DefaultGrailsPluginManager
-//import org.codehaus.groovy.grails.plugins.GrailsPlugin
-//import org.apache.tools.ant.taskdefs.Ant
 
-
-includeTargets << new File ("${regenPluginDir}/scripts/GrailsRegenerate.groovy")
+includeTargets << new File ("${regenPluginDir}/scripts/_GrailsRegenerate.groovy")
 
 includeTargets << grailsScript("_GrailsBootstrap")
 includeTargets << grailsScript("_GrailsCreateArtifacts")

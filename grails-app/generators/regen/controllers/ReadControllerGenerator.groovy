@@ -30,7 +30,7 @@ class ReadControllerGenerator  {
     def genTask = args.genTask
     def templateFile = TemplateLocator.instance().getTemplateFile(genTask)
     genTask.resultFile = new FileSystemResource(
-      "grails-app/controllers/${domainClass.clazz.package.name.replaceAll("\\.","/")}/${domainClass.name}Controller.groovy")
+      "grails-app/controllers/${domainClass.clazz.getPackage().name.replaceAll("\\.","/")}/${domainClass.name}Controller.groovy")
     templateFile?.inputStream.getText()
  }
 }
