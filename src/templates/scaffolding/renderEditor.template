@@ -28,7 +28,7 @@
         out << renderOneToMany(domainClass, property)
 
     private renderEnumEditor(domainClass, property) {
-        return "<g:select name=\"${property.name}\" from=\"\${${property.type.name}?.values()}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
+        return "<g:select name=\"${property.name}\" from=\"\${${property.type.getName()}?.values()}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
     }
 
     private renderStringEditor(domainClass, property) {
@@ -62,12 +62,12 @@
 
     private renderManyToOne(domainClass,property) {
         if (property.association) {
-            return "<g:select name=\"${property.name}.id\" from=\"\${${property.type.name}.list()}\" optionKey=\"id\" value=\"\${${domainInstance}?.${property.name}?.id}\" ${renderNoSelection(property)} />"
+            return "<g:select name=\"${property.name}.id\" from=\"\${${property.type.getName()}.list()}\" optionKey=\"id\" value=\"\${${domainInstance}?.${property.name}?.id}\" ${renderNoSelection(property)} />"
         }
     }
 
     private renderManyToMany(domainClass, property) {
-        return "<g:select name=\"${property.name}\" from=\"\${${property.referencedDomainClass.fullName}.list()}\" multiple=\"yes\" optionKey=\"id\" size=\"5\" value=\"\${${domainInstance}?.${property.name}}\" />"
+        return "<g:select name=\"${property.name}\" from=\"\${${property.referencedDomainClass.getFullName()}.list()}\" multiple=\"yes\" optionKey=\"id\" size=\"5\" value=\"\${${domainInstance}?.${property.name}}\" />"
     }
 
     private renderOneToMany(domainClass, property) {
