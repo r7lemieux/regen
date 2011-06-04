@@ -26,7 +26,7 @@ class GrailsTemplateRegenerator {
 
     List<String> givenViewNames = new ArrayList<String>()
 
-    def availableTypeNames = []
+    HashSet<String> availableTypeNames = new HashSet<String>();
     ApplicationHolder.getApplication().getArtefacts('Generator').each { g ->
       def m = g.name =~ '.*([A-Z][a-z0-9-_]*)$'
       if (m.matches()) availableTypeNames.add(m[0][1].toLowerCase())
@@ -42,7 +42,6 @@ class GrailsTemplateRegenerator {
         givenViewNames.addAll getViewTemplateNames()
       } else if (targetTypeName.startsWith('view-') && targetTypeName.size() > 5) {
         givenViewNames << targetTypeName.substring(5)
-        //println "givenViewNames $givenViewNames"
       } else {
         GenerationTask task = new GenerationTask()
         task.domainClass = domainClass
@@ -88,6 +87,7 @@ class GrailsTemplateRegenerator {
     if (templateTags) {
       templateTag = templatetags[view]
     }
+
     if (!templateTag) {
       templateTag = domainClass.getPropertyOrStaticPropertyOrFieldValue("regenTemplates", String.class) ?: ''
     }
@@ -98,7 +98,12 @@ class GrailsTemplateRegenerator {
       // search by path
       pathToSearch = domainClass.getPackageName() //?.tokenize('.')
     }
-    collectFileNamesOnPath("${baseDir}/src/templates/scaffolding", pathToSearch)
+    TreeSet<String> viewTemplates = collectFileNamesOnPath("${baseDir}/src/templates/scaffolding", pathToSearch)
+    if (!templateTag && !viewTemplates ) {
+      viewTemplates = new TreeSet<String>()
+      collectGspNamesInDir("${baseDir}/src/templates/scaffolding", viewTemplates);
+    } 
+    viewTemplates
   }
 
   public Set<String> collectFileNamesOnPath (String baseDir, String pathToSearch) {
@@ -109,12 +114,15 @@ class GrailsTemplateRegenerator {
       def relativePath = pathDirs[0..i].inject(''){path, dir -> "${path}/${dir}"}
       def filePath = "${baseDir}${relativePath}"
       //println "filePath ${filePath}"
-      def dir = new File(filePath)
-      if (dir.exists()) {
-        (dir.list() as List).each{name-> if(name.endsWith('.gsp')) fileNames.add name[0..-5]}
-      }
+      collectGspNamesInDir(filePath, fileNames)
     }
-    fileNames
+  }
+
+  public void collectGspNamesInDir(String filePath, TreeSet fileNames) {
+    def dir = new File(filePath)
+    if (dir.exists()) {
+     (dir.list() as List).each{name-> if(name.endsWith('.gsp')) fileNames.add name[0..-5]}
+    }
   }
 
   def getViewTemplateNames0() {
