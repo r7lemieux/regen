@@ -48,11 +48,10 @@ class PropertyGroupDsl {
 
   public Map readGroup(Class clazz, String groupName) {
   Map groups = [:]
-  String.metaClass { ->
-    multiply << { List s -> [delegate, s] }
-    multiply << { Map  s -> [delegate,"\$s"] }
-  }
 
+  String.metaClass.multiply << { List s -> [delegate, s   ] }
+  String.metaClass.multiply << { Map  s -> [delegate,"\$s"] }
+  
   def domainMetaClass = new PropertyGroupDslMetaClass(clazz)
   clazz.metaClass = domainMetaClass
   def c = clazz.newInstance()

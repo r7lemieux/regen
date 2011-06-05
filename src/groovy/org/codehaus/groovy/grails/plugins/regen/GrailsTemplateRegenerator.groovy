@@ -100,8 +100,9 @@ class GrailsTemplateRegenerator {
     }
     TreeSet<String> viewTemplates = collectFileNamesOnPath("${baseDir}/src/templates/scaffolding", pathToSearch)
     if (!templateTag && !viewTemplates ) {
-      viewTemplates = new TreeSet<String>()
-      collectGspNamesInDir("${baseDir}/src/templates/scaffolding", viewTemplates);
+
+      viewTemplates = new TreeSet()
+      viewTemplates.addAll (['list','create','delete','edit','show'])
     } 
     viewTemplates
   }
@@ -109,11 +110,9 @@ class GrailsTemplateRegenerator {
   public Set<String> collectFileNamesOnPath (String baseDir, String pathToSearch) {
     Set<String> fileNames = new TreeSet<String>()
     def pathDirs = pathToSearch.tokenize('.')
-    //println "pathDirs $pathDirs"
     for (i in pathDirs.size()-1..0 ) {
       def relativePath = pathDirs[0..i].inject(''){path, dir -> "${path}/${dir}"}
       def filePath = "${baseDir}${relativePath}"
-      //println "filePath ${filePath}"
       collectGspNamesInDir(filePath, fileNames)
     }
   }
